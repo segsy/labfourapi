@@ -65,79 +65,79 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 ## Larvael version 10.x
-# ONLINE BOOK LIBRARY
-API Endpoints:
-Books:
-Create, retrieve, update, and delete operations.
-Authors:
-Create, retrieve, update, and delete operations.
-Authentication:
-Implement JWT-based authentication for secure API access.
-Validation and Error Handling:
-Validate requests for books and authors.
-Provide clear error messages.
-Database:
-Design MySQL database schema for books and authors.
-Use Laravel’s Eloquent ORM for database interactions.
-Documentation:
-Optionally document API endpoints.
+<strong># ONLINE BOOK LIBRARY</strong>
+<p>API Endpoints:</p>
+<strong>Books:</strong>
+<p>Create, retrieve, update, and delete operations.</p>
+<strong>Authors:</strong>
+<p>Create, retrieve, update, and delete operations.</p>
+<strong>Authentication:</strong>
+<p>Implement JWT-based authentication for secure API access.</p>
+<p>Validation and Error Handling:</p>
+<p>Validate requests for books and authors.</p>
+<p>Provide clear error messages.</p>
+<strong>Database:</strong>
+<p>Design MySQL database schema for books and authors.</p>
+<p>Use Laravel’s Eloquent ORM for database interactions.</p>
+<strong>Documentation:</strong>
+<p>Optionally document API endpoints.</p>
 
-User Interface:
-Home Page:
-Display list of books with titles and authors.
-Book Details Page:
-Show detailed information about specific books.
-Author Details Page:
-Display detailed information about authors.
-User Authentication:
-Implement basic login functionality.
-Form Handling:
-Create simple forms for managing books and authors.
-Bonus Points
-Search Functionality:
-Implement search functionality for books and authors.
-Testing:
-Add unit and integration tests for API endpoints.
+<strong>User Interface:</strong>
+<strong>Homepage:</strong>
+<p>Display list of books with titles and authors.</p>
+<strong>Book Details Page:</strong>
+<p>Show detailed information about specific books.</p>
+<strong>Author Details Page:</strong>
+<p>Display detailed information about authors.</p>
+<strong>User Authentication:</strong>
+<p>Implement basic login functionality.</p>
+<strong>Form Handling:</strong>
+<p>Create simple forms for managing books and authors.</p>
 
-Eloquent API Resources allow you to transform your model data into a custom format for API responses. Let's create an API Resource for the Product model to control how the Product data is presented in the API responses.
+<strong>Search Functionality:</strong>
+<p>Implement search functionality for books and authors.</p>
+<strong>Testing:</strong>
+<p>Add unit and integration tests for API endpoints.</p>
 
-To generate an API Resource for the Product model, run the following Artisan command.
-php artisan make:resource Product
-In the toArray() method, you define the structure of the response array by specifying the attributes to include from the Product model. You can add additional attributes or customize the response format as needed.
+<p>Eloquent API Resources allow you to transform your model data into a custom format for API responses. Let's create an API Resource for the Product model to control how the Product data is presented in the API responses.</p>
 
-Now, I have used POSTMAN API for testing purposes, Postman is a collaboration platform for API development. Postman's features simplify each step of building an API and streamline collaboration so you can create better APIs faster.
+<p>To generate an API Resource for the Product model, run the following Artisan command.</p>
+<p>php artisan make:resource Product</p>
+<p>In the toArray() method, you define the structure of the response array by specifying the attributes to include from the Product model. You can add additional attributes or customize the response format as needed.</p>
 
-Here I have added some screenshots with of the postman in the folder attached directory  for your better understanding on how to test the API.
-## API ENDPOINTS
-Auth
-http://127.0.0.1:8000/api/register
-http://127.0.0.1:8000/api/login
-http://127.0.0.1:8000/api/refresh
-http://127.0.0.1:8000/api/logout
-Books Api
-Endpoint
-PUT http://127.0.0.1:8000/api/updatebooks/2
-POST http://127.0.0.1:8000/api/books
-GET http://127.0.0.1:8000/api/allbooks
-DELETE http://127.0.0.1:8000/api/deletebook/2
-Author
-POST http://127.0.0.1:8000/api/sendauthor
-GET http://127.0.0.1:8000/api/allauthor
-PUT http://127.0.0.1:8000/api/author/3
-DELETE
-http://127.0.0.1:8000/api/deleauthor/4
+<p>Now, I have used POSTMAN API for testing purposes, Postman is a collaboration platform for API development. Postman's features simplify each step of building an API and streamline collaboration so you can create better APIs faster.</p>
+
+<p>Here I have added some screenshots with of the postman in the folder attached directory  for your better understanding on how to test the API.</p>
+<strong>## API ENDPOINTS</strong>
+<strong>Auth</strong>
+<li>http://127.0.0.1:8000/api/register</li>
+<li>http://127.0.0.1:8000/api/login</li>
+<li>http://127.0.0.1:8000/api/refresh</li>
+<li>http://127.0.0.1:8000/api/logout</li>
+<strong>Books Api</strong>
+<strong>Endpoint</strong>
+<li>PUT http://127.0.0.1:8000/api/updatebooks/2</li>
+<li>POST http://127.0.0.1:8000/api/books</li>
+<li>GET http://127.0.0.1:8000/api/allbooks</li>
+<li>DELETE http://127.0.0.1:8000/api/deletebook/2</li>
+<strong>Author</strong>
+<li>POST http://127.0.0.1:8000/api/sendauthor</li>
+<li>GET http://127.0.0.1:8000/api/allauthor</li>
+<li>PUT http://127.0.0.1:8000/api/author/3</li>
+<strong>DELETE</strong>
+<li>http://127.0.0.1:8000/api/deleauthor/4</li>
 
 
-To run locally and producion
-composer install
-npm install
-To run the vue js application using the vite. use the command
-npm run dev
-To run the application we can either use a virtual host or we can use serve command
-php artisan serve
+<p>To run locally and producion</p>
+<p>composer install</p>
+<p>npm install</p>
+<p>To run the vue js application using the vite. use the command</p>
+<p>npm run dev</p>
+<p>To run the application we can either use a virtual host or we can use serve command</p>
+<p>php artisan serve</p>
 
-You may need to create an account or login to the application to view and update the crud application.
-http://127.0.0.1:8000/login
-http://127.0.0.1:8000/books
+<p>You may need to create an account or login to the application to view and update the crud application.</p>
+<li>http://127.0.0.1:8000/login</li>
+<li>http://127.0.0.1:8000/books</li>
 
-http://127.0.0.1:8000/authors
+<li>http://127.0.0.1:8000/authors</li>

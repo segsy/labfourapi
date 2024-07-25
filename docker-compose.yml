@@ -1,59 +1,40 @@
-version: '3.8'
-
+version: '3'
 services:
   app:
     build:
-      context: .
-      dockerfile: Dockerfile
-    image: laravel-app
-    container_name: laravel-app
-    restart: unless-stopped
-    tty: true
-    environment:
-      SERVICE_NAME: app
-      SERVICE_TAGS: dev
-    working_dir: /var/www
+      context: ./
+      target: dev
     volumes:
-      - .:/var/www
-      - ./vendor:/var/www/vendor
-      - ./storage:/var/www/storage
-    networks:
-      - app-network
-
-  webserver:
-    image: nginx:alpine
-    container_name: nginx
-    restart: unless-stopped
-    tty: true
+      - .:/var/www/html
+      - .env.dev:/var/www/html/.env
     ports:
-      - "8080:80"
-    volumes:
-      - ./nginx:/etc/nginx/conf.d
-      - .:/var/www
+      - "8082:80"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
     networks:
-      - app-network
-
+      - laravel
+    depends_on:
+      - mysql    
   mysql:
-    image: mysql:5.7
-    container_name: mysql
-    restart: unless-stopped
-    tty: true
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_DATABASE: labfourapi
-      MYSQL_ROOT_PASSWORD: root
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
-    volumes:
-      - mysql-data:/var/lib/mysql
-    networks:
-      - app-network
-
+      image: 'mysql/mysql-server:8.0'
+      environment:
+        MYSQL_ROOT_HOST: "%"
+        MYSQL_ROOT_PASSWORD: "root"
+        MYSQL_USER: "labfourapi"
+        MYSQL_PASSWORD: "Money2020#"
+        MYSQL_DATABASE: "labfourapi"
+        MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      ports:
+        - 3906:3306
+      volumes:
+        - 'mysql8:/var/lib/mysql'
+        - './db/init.sql:/docker-entrypoint-initdb.d/01init.sql'
+      networks:
+        - laravel
 networks:
-  app-network:
-    driver: bridge
-
+    laravel:
+        driver: bridge
 volumes:
-  mysql-data:
-    driver: local
+    mysql8:
+        driver: local
