@@ -1,52 +1,40 @@
+# Use the official Ubuntu base image
+FROM ubuntu:20.04
 
-FROM composer:2.4 as build
-COPY . /app/
-RUN curl -sS https://getcomposer.org/installer | php -- \
-     --install-dir=/usr/local/bin --filename=composer
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Install PHP and necessary extensions
+RUN apt-get update && apt-get install -y \
+    php-fpm \
+    php-mysql \
+    php-redis \
+    curl \
+    unzip \
+    && apt-get clean
 
-WORKDIR /app
-COPY . .
-RUN composer install
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-FROM php:8.1-apache-buster as dev
+# Create the application directory
+RUN mkdir -p /var/www/html
 
-ENV APP_ENV=dev
-ENV APP_DEBUG=true
-ENV COMPOSER_ALLOW_SUPERUSER=1
+# Set the working directory
+WORKDIR /var/www/html
 
-RUN apt-get update && apt-get install -y zip
-RUN docker-php-ext-install pdo pdo_mysql
+# Update PHP-FPM configuration to run as root (not recommended for production)
+RUN sed -i "s/user = www-data/user = root/g" /etc/php/7.4/fpm/pool.d/www.conf
+RUN sed -i "s/group = www-data/group = root/g" /etc/php/7.4/fpm/pool.d/www.conf
+RUN echo "php_admin_flag[log_errors] = on" >> /etc/php/7.4/fpm/pool.d/www.conf
 
-COPY . /var/www/html/
-COPY --from=build /usr/bin/composer /usr/bin/composer
-RUN composer install --prefer-dist --no-interaction
+# Ensure PHP-FPM is listening on port 9000
+RUN sed -i "s/listen = \/run\/php\/php7.4-fpm.sock/listen = 9000/g" /etc/php/7.4/fpm/pool.d/www.conf
 
-COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
-COPY .env.dev /var/www/html/.env
+# Expose the port PHP-FPM is running on
+EXPOSE 9000
 
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    chmod 777 -R /var/www/html/storage/ && \
-    chown -R www-data:www-data /var/www/ && \
-    a2enmod rewrite
+# Set the user to root
+USER root
 
-FROM php:8.1-apache-buster as production
-
-ENV APP_ENV=production
-ENV APP_DEBUG=false
-
-RUN docker-php-ext-configure opcache --enable-opcache && \
-    docker-php-ext-install pdo pdo_mysql
-COPY docker/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
-
-COPY --from=build /app /var/www/html
-COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
-COPY .env.prod /var/www/html/.env
-
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    chmod 777 -R /var/www/html/storage/ && \
-    chown -R www-data:www-data /var/www/ && \
-    a2enmod rewrite
+# Start PHP-FPM
+CMD ["php-fpm7.4", "-F"]
