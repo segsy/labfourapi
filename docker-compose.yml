@@ -1,66 +1,40 @@
-version: '3.8'
+version: '3'
 services:
-  main:
-    container_name: Serve
+  app:
     build:
-      context: .
+      context: ./
       dockerfile: Dockerfile
-    command: 'php artisan serve --host=0.0.0.0'
     volumes:
-      - .:/app
+      - .:/var/www/html
+      - .env.dev:/var/www/html/.env
     ports:
-      - 8000:8000
-
-  queue:
-    container_name: Queue
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: 'php artisan queue:work'
-    depends_on:
-      - db
-
-  db:
-    platform: ubuntu/x86_64
-    image: mysql:8.0
-    container_name: Database
+      - "8082:9000"
     environment:
-      MYSQL_DATABASE: "${DB_DATABASE}"
-      MYSQL_USER: "${DB_USERNAME}"
-      MYSQL_ROOT: "root"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
-      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
-    volumes:
-      - db:/var/lib/mysql
-    ports:
-      - 3306:3306
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: PhpMyAdmin
-    links:
-      - db
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-    restart: always
-    ports:
-      - 8081:80
-
-  mailpit:
-    image: axllent/mailpit
-    container_name: MailPit
-    ports:
-      - "1025:1025"
-      - "8025:8025"
+      - APP_ENV=local
+      - APP_DEBUG=true
     networks:
-      - laravel-exa
-
+      - laravel
+    depends_on:
+      - mysql    
+  mysql:
+    image: 'mysql/mysql-server:8.0'
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_USER: "labfourapi"
+      MYSQL_PASSWORD: "Money2020#"
+      MYSQL_DATABASE: "labfourapi"
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    ports:
+      - 3906:3306
+    volumes:
+      - 'mysql8:/var/lib/mysql'
+      - './db/init.sql:/docker-entrypoint-initdb.d/01init.sql'
+    networks:
+      - laravel
 networks:
-  laravel-exa:
+  laravel:
     driver: bridge
-
 volumes:
-  db:
+  mysql8:
     driver: local
