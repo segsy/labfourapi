@@ -1,5 +1,5 @@
 {
-    "name": "online-book-librarynew",
+    "name": "online-book-library/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
     "keywords": ["laravel", "framework"],
